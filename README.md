@@ -4,3 +4,4 @@
 Team
 Victor Kaiser-Pendergrast: Developer
 Jeremy Avery: Glass UI/webpage Designer
+Ryan Spletzer: Developer
