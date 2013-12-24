@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">DriveSafe4Glass</string>
+    <string name="voice_keep_me_awake">Keep me awake</string>
+    <string name="menu_stop">Stop</string>
+    <string name="menu_get_directions">Get Directions</string>
+
+</resources>
