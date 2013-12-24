@@ -4,5 +4,6 @@
     <string name="voice_keep_me_awake">Keep me awake</string>
     <string name="menu_stop">Stop</string>
     <string name="menu_get_directions">Get Directions</string>
+    <string name="text_keeping_you_awake">Keeping you awake&#8230;</string>
 
 </resources>
