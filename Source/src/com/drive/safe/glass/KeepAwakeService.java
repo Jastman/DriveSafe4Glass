@@ -8,7 +8,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
+import android.speech.tts.TextToSpeech;
 
 import com.drive.safe.glass.view.LiveCardDrawer;
 import com.google.android.glass.timeline.LiveCard;
@@ -19,8 +21,26 @@ public class KeepAwakeService extends Service {
 	private static final String TAG = "KeepAwakeService";
 	
 	private static final String CARD_TAG = "DriveSafe4Glass_LiveCard";
+	
+	/**
+	 * A binder that allows other parts of the application to the speech capability
+	 */
+	public class KeepAwakeBinder extends Binder {
+		/**
+		 * Try to wake up the user through text to speech
+		 */
+		public void wakeUpUser(){
+			if(mTTS != null){
+				mTTS.speak(mContext.getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
+			}
+		}
+	}
+	
+	private final KeepAwakeBinder mBinder = new KeepAwakeBinder();
 
 	private Context mContext;
+	
+	private TextToSpeech mTTS;
 
 	private LiveCard mLiveCard;
 	private TimelineManager mTimeline;
@@ -34,11 +54,18 @@ public class KeepAwakeService extends Service {
 		
 		mTimeline = TimelineManager.from(mContext);
 		mLiveCardDrawer = new LiveCardDrawer(mContext);
+		
+		mTTS = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				//Nothing to do here
+			}
+		});
 	}	
 
 	@Override
 	public IBinder onBind(Intent intent){
-		return null;
+		return mBinder;
 	}	
 
 	@Override
