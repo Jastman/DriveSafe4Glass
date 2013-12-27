@@ -34,6 +34,20 @@ public class KeepAwakeService extends Service {
 				mTTS.speak(mContext.getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
 			}
 		}
+
+		/**
+		 * Get directions to a rest area
+		 */
+		public void getDirectionsToRestArea(){
+			//TODO, this might not be the right format
+			//for the navigation intent
+			Intent directionsIntent = new Intent(Intent.ACTION_VIEW);
+			directionsIntent.setData(Uri.parse("geo:0,0?q=rest+area"));
+			startActivity(directionsIntent);
+
+			//Stop KeepAwakeService now that the user is in navigation
+			stopService(new Intent(this, KeepAwakeService.class));
+		}
 	}
 	
 	private final KeepAwakeBinder mBinder = new KeepAwakeBinder();

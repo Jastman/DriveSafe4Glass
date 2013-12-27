@@ -13,10 +13,32 @@ import android.view.MenuItem;
  */
 public class KeepAwakeMenuActivity extends Activity {
 	private static final String TAG = "MenuActivity";
+
+
+	private KeepAwakeService.KeepAwakeBinder mServiceBinder;
+
+	private ServiceConnection mServiceConn = new ServiceConnection(){
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service){
+			if(service instanceof KeepAwakeService.KeepAwakeBinder){
+				mServiceBinder = (KeepAwakeService.KeepAwakeBinder) service;
+			}
+			
+			unbindService(this);
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName name){
+			//Do nothing
+		}
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		//Bind the service to get access to the getDirectionsToRestArea method
+		bindService(new Intent(this, KeepAwakeService.class), mServiceConn, 0);
 	}
 
 	@Override
@@ -36,9 +58,17 @@ public class KeepAwakeMenuActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle item selection.
 		switch (item.getItemId()) {
+		case R.id.directions:
+			Log.d(TAG, "Directions");
+			if(mServiceBinder != null){
+				mServiceBinder.getDirectionsToRestArea();
+			}
+			finish();
+			return true;
 		case R.id.stop:
 			Log.d(TAG, "Stopping");
 			stopService(new Intent(this, KeepAwakeService.class));
+			finish();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
