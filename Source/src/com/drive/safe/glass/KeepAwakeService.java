@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
@@ -46,7 +47,7 @@ public class KeepAwakeService extends Service {
 			startActivity(directionsIntent);
 
 			//Stop KeepAwakeService now that the user is in navigation
-			stopService(new Intent(this, KeepAwakeService.class));
+			stopKeepAwakeService();
 		}
 	}
 	
@@ -117,6 +118,14 @@ public class KeepAwakeService extends Service {
 		}
 		
 		super.onDestroy();
+	}
+
+	/**
+	 * Stops the KeepAwakeService 
+	 * (for all intensive purposes, stops the entire application)
+	 */
+	private void stopKeepAwakeService(){
+		stopService(new Intent(mContext, KeepAwakeService.class));
 	}
 
 }

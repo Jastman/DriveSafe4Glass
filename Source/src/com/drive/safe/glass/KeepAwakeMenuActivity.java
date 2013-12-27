@@ -1,8 +1,11 @@
 package com.drive.safe.glass;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,7 +34,7 @@ public class KeepAwakeMenuActivity extends Activity {
 		public void onServiceDisconnected(ComponentName name){
 			//Do nothing
 		}
-	}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
