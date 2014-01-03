@@ -14,6 +14,9 @@ import android.util.Log;
 
 public class EyeEventReceiver extends BroadcastReceiver {
 	private static final String TAG = "EyeEventReceiver";
+	
+	private static final String WINK = "WINK";
+	private static final String DOUBLE_BLINK = "DOUBLE_BLINK";
 
 	/**
 	 * An interface for a listener to capture wink and double blinks
@@ -42,9 +45,9 @@ public class EyeEventReceiver extends BroadcastReceiver {
 		Log.d(TAG, eyeEvent + " is detected");
 
 		if (mListener != null) {
-			if (eyeEvent.equals(EyeGesture.WINK)) {
+			if (eyeEvent.equals(WINK)) {
 				mListener.onWink();
-			} else if (eyeEvent.equals(EyeGesture.DOUBLE_BLINK)) {
+			} else if (eyeEvent.equals(DOUBLE_BLINK)) {
 				mListener.onDoubleBlink();
 			} else{
 				Log.i(TAG, "Unknown Gesture: \"" + eyeEvent + "\"");

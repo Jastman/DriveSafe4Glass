@@ -10,10 +10,9 @@ import com.google.android.glass.eye.EyeGestureManager;
 
 public class SleepDetector {
 	private static final String TAG = "SleepDetector";
-	
+
 	/**
-	 * An interface for a listener to receive
-	 * sleep events
+	 * An interface for a listener to receive sleep events
 	 */
 	public static interface SleepListener {
 		public void onUserFallingAsleep();
@@ -39,22 +38,21 @@ public class SleepDetector {
 	/**
 	 * Every millisecond, mSleepLevel is reduced by DEGRADATION_PER_MILLISECOND
 	 */
-	private static final float DEGRADATION_PER_MILLISECOND = 0.001f;
+	private static final float DEGRADATION_PER_MILLISECOND = 0.0003f;
 
-	
 	private Context mContext;
-	
+
 	private EyeGestureManager mEyeGestureManager;
 	private EyeEventReceiver mEyeEventReceiver;
 	private EyeEventListener mEyeEventListener;
-	
+
 	private SleepListener mSleepListener;
 
 	private float mSleepLevel = 0f;
 
 	private long mLastEyeEvent = 0;
-	
-	public SleepDetector(Context context, SleepListener listener){
+
+	public SleepDetector(Context context, SleepListener listener) {
 		this(context);
 		mSleepListener = listener;
 	}
@@ -63,7 +61,7 @@ public class SleepDetector {
 		mContext = context;
 
 		mEyeGestureManager = EyeGestureManager.from(mContext);
-		
+
 		mEyeEventListener = new EyeEventListener() {
 			@Override
 			public void onWink() {
@@ -87,23 +85,25 @@ public class SleepDetector {
 		mEyeGestureManager.stopDetector(EyeGesture.DOUBLE_BLINK);
 		mEyeGestureManager.stopDetector(EyeGesture.WINK);
 
-        mEyeGestureManager.enableDetectorPersistently(EyeGesture.DOUBLE_BLINK, true);
-        mEyeGestureManager.enableDetectorPersistently(EyeGesture.WINK, true);
+		mEyeGestureManager.enableDetectorPersistently(EyeGesture.DOUBLE_BLINK,
+				true);
+		mEyeGestureManager.enableDetectorPersistently(EyeGesture.WINK, true);
 
-        IntentFilter eyeFilter = new IntentFilter("com.google.glass.action.EYE_GESTURE");
-        eyeFilter.setPriority(3000);
+		IntentFilter eyeFilter = new IntentFilter(
+				"com.google.glass.action.EYE_GESTURE");
+		eyeFilter.setPriority(3000);
 
-        mContext.registerReceiver(mEyeEventReceiver, eyeFilter);
+		mContext.registerReceiver(mEyeEventReceiver, eyeFilter);
 	}
-	
+
 	public void removeReceiver() {
 		mEyeGestureManager.stopDetector(EyeGesture.DOUBLE_BLINK);
 		mEyeGestureManager.stopDetector(EyeGesture.WINK);
 
-        mContext.unregisterReceiver(mEyeEventReceiver);
+		mContext.unregisterReceiver(mEyeEventReceiver);
 	}
-	
-	public void setSleepListener(SleepListener listener){
+
+	public void setSleepListener(SleepListener listener) {
 		mSleepListener = listener;
 	}
 
@@ -111,22 +111,25 @@ public class SleepDetector {
 		// Don't apply the degradation to the first eye event
 		if (mLastEyeEvent != 0) {
 			// mSleepLevel has to be at least 0
-			mSleepLevel = Math.max(0, mSleepLevel - ((System.currentTimeMillis() - mLastEyeEvent) *  DEGRADATION_PER_MILLISECOND));
+			mSleepLevel = Math
+					.max(0,
+							mSleepLevel
+									- ((System.currentTimeMillis() - mLastEyeEvent) * DEGRADATION_PER_MILLISECOND));
 		}
 
 		mLastEyeEvent = System.currentTimeMillis();
 	}
 
 	private void checkSleepLevel() {
+		Log.d(TAG, "Sleep Level: " + mSleepLevel + "/" + SLEEP_THRESHOLD);
 		if (mSleepLevel >= SLEEP_THRESHOLD) {
 			// The user is falling asleep
 			Log.i(TAG, "The user is falling asleep");
-			
-			if(mSleepListener != null){
+
+			if (mSleepListener != null) {
 				mSleepListener.onUserFallingAsleep();
 			}
 		}
 	}
-	
 
 }

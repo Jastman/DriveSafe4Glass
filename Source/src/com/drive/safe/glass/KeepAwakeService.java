@@ -134,7 +134,11 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 		Log.i(TAG, "User is falling asleep");
 		
 		mTTS.speak(getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
-		startActivity(new Intent(mContext, KeepAwakeMenuActivity.class));
+		
+		Intent menuIntent = new Intent(mContext, KeepAwakeMenuActivity.class);
+		menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		
+		getApplication().startActivity(menuIntent);
 	}
 
 }
