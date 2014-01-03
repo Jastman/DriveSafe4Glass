@@ -28,7 +28,7 @@ public class LiveCardDrawer implements SurfaceHolder.Callback, LiveCardView.Draw
 		mLiveCardView.setDrawListener(this);
 		
 		mLiveCardView.setTitle(mContext.getString(R.string.text_keeping_you_awake));
-		mLiveCardView.setImage(R.drawable.ic_drive_50);
+		mLiveCardView.setImage(R.drawable.ic_eye_150);
 	}
 
 	@Override

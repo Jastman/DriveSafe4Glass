@@ -25,7 +25,6 @@ public class LiveCardView extends FrameLayout {
 
 	private ImageView mImageView;
 	private TextView mTextTitle;
-	private TextView mTextSubtitle;
 
 	private Context mContext;
 
@@ -44,11 +43,10 @@ public class LiveCardView extends FrameLayout {
 
 		mContext = context;
 
-		LayoutInflater.from(context).inflate(R.layout.card_full_image, this);
+		LayoutInflater.from(context).inflate(R.layout.card_half_image_with_title, this);
 
 		mImageView = (ImageView) findViewById(R.id.card_image);
 		mTextTitle = (TextView) findViewById(R.id.card_title);
-		mTextSubtitle = (TextView) findViewById(R.id.card_subtitle);
 	}
 
 	/**
@@ -70,10 +68,6 @@ public class LiveCardView extends FrameLayout {
 
 	public void setTitle(String html) {
 		mTextTitle.setText(Html.fromHtml(html));
-	}
-
-	public void setSubitle(String html) {
-		mTextSubtitle.setText(Html.fromHtml(html));
 	}
 
 	public void setDrawListener(DrawListener drawer) {
