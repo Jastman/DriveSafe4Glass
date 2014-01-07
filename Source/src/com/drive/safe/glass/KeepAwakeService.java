@@ -14,16 +14,22 @@ import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
-import com.drive.safe.glass.eye.SleepDetector;
+import com.drive.safe.glass.sleep.SleepDetector;
 import com.drive.safe.glass.view.LiveCardDrawer;
 import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.LiveCard.PublishMode;
 import com.google.android.glass.timeline.TimelineManager;
 
-public class KeepAwakeService extends Service implements SleepDetector.SleepListener {
+public class KeepAwakeService extends Service implements
+		SleepDetector.SleepListener {
 	private static final String TAG = "KeepAwakeService";
 
 	private static final String CARD_TAG = "DriveSafe4Glass_LiveCard";
+	
+	/**
+	 * About how long it takes to speak the message in milliseconds
+	 */
+	private static final long SPEECH_TIME = 5000;
 
 	/**
 	 * A binder that allows other parts of the application to the speech
@@ -36,7 +42,8 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 		public void getDirectionsToRestArea() {
 			Intent directionsIntent = new Intent(Intent.ACTION_VIEW);
 			directionsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			directionsIntent.setData(Uri.parse("google.navigation:q=rest+area"));
+			directionsIntent
+					.setData(Uri.parse("google.navigation:q=rest+area"));
 			getApplication().startActivity(directionsIntent);
 
 			// Stop KeepAwakeService now that the user is in navigation
@@ -57,6 +64,8 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 
 	private LiveCardDrawer mLiveCardDrawer;
 
+	private long mLastTimeSpoke = 0;
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -93,8 +102,10 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 			mLiveCard.getSurfaceHolder().addCallback(mLiveCardDrawer);
 
 			// Setup what to do on tapping of the card
-			Intent menuActivityIntent = new Intent(mContext, KeepAwakeMenuActivity.class);
-			mLiveCard.setAction(PendingIntent.getActivity(mContext, 0, menuActivityIntent, 0));
+			Intent menuActivityIntent = new Intent(mContext,
+					KeepAwakeMenuActivity.class);
+			mLiveCard.setAction(PendingIntent.getActivity(mContext, 0,
+					menuActivityIntent, 0));
 
 			mLiveCard.publish(PublishMode.REVEAL);
 		} else {
@@ -116,7 +127,7 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 		}
 
 		mSleepDetector.removeReceiver();
-		
+
 		super.onDestroy();
 	}
 
@@ -132,12 +143,16 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 	@Override
 	public void onUserFallingAsleep() {
 		Log.i(TAG, "User is falling asleep");
-		
-		mTTS.speak(getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
-		
+
+		if (System.currentTimeMillis() - mLastTimeSpoke > SPEECH_TIME) {
+			mTTS.speak(getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
+			mLastTimeSpoke = System.currentTimeMillis();
+		}
+
 		Intent menuIntent = new Intent(mContext, KeepAwakeMenuActivity.class);
 		menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		
+		menuIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
 		getApplication().startActivity(menuIntent);
 	}
 
