@@ -1,0 +1,45 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/article_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity" >
+
+    <ImageView
+        android:id="@+id/card_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="center" />
+
+    <LinearLayout
+        android:id="@+id/card_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="40px"
+        android:paddingLeft="40px"
+        android:paddingRight="40px"
+        android:paddingTop="40px"
+        android:background="@drawable/text_gradient" >
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="240px"
+            android:ellipsize="marquee"
+            android:gravity="bottom|left"
+            android:textColor="#FFFFFF"
+            android:textSize="50px" />
+
+        <TextView
+            android:id="@+id/card_subtitle"
+            android:layout_width="match_parent"
+            android:layout_height="40px"
+            android:ellipsize="end"
+            android:gravity="bottom|right"
+            android:textColor="#FFFFFF"
+            android:textSize="26px"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</FrameLayout>

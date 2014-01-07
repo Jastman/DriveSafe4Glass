@@ -1,0 +1,10 @@
+<resources>
+
+    <string name="app_name">DriveSafe4Glass</string>
+    <string name="voice_keep_me_awake">Keep me awake</string>
+    <string name="speech_wake_up">Wake up! Perhaps you should find a rest area</string>
+    <string name="menu_stop">Stop</string>
+    <string name="menu_get_directions">Get Directions to a Rest Area</string>
+    <string name="text_keeping_you_awake">Keeping you awake&#8230;</string>
+
+</resources>
