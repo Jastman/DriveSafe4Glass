@@ -50,7 +50,6 @@ public class KeepAwakeMenuActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		openOptionsMenu();
-		turnOnScreen();
 	}
 
 	@Override
@@ -87,10 +86,4 @@ public class KeepAwakeMenuActivity extends Activity {
 		finish();
 	}
 	
-	private void turnOnScreen() {
-        Window window = this.getWindow();
-        window.addFlags(LayoutParams.FLAG_DISMISS_KEYGUARD);
-        window.addFlags(LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(LayoutParams.FLAG_TURN_SCREEN_ON);
-    }
 }

@@ -172,11 +172,6 @@ public class SleepDetector {
 
 	private void addHeadEvent(float zMagnitude){
 		if(mLastHeadEvent != 0){
-//			float absMagnitude = Math.abs(zMagnitude);
-//			if(absMagnitude > HEAD_THRESHOLD){
-//				mSleepLevel += (absMagnitude - HEAD_THRESHOLD) * (System.currentTimeMillis() - mLastHeadEvent) * MODIFIER_HEAD_SCALE_PER_MILLISECOND;
-//			}
-			
 			if(zMagnitude < HEAD_LOW_THRESHOLD){
 				mSleepLevel += (-zMagnitude + HEAD_LOW_THRESHOLD) * (System.currentTimeMillis() - mLastHeadEvent) * MODIFIER_HEAD_SCALE_PER_MILLISECOND;
 			}else if(zMagnitude > HEAD_HIGH_THRESHOLD){
