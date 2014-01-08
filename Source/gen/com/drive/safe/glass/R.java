@@ -14,10 +14,11 @@ public final class R {
         public static final int ic_directions_50=0x7f020000;
         public static final int ic_drive_50=0x7f020001;
         public static final int ic_eye_150=0x7f020002;
-        public static final int ic_no_50=0x7f020003;
-        public static final int ic_warning_150=0x7f020004;
-        public static final int ic_warning_50=0x7f020005;
-        public static final int text_gradient=0x7f020006;
+        public static final int ic_eye_50=0x7f020003;
+        public static final int ic_no_50=0x7f020004;
+        public static final int ic_warning_150=0x7f020005;
+        public static final int ic_warning_50=0x7f020006;
+        public static final int text_gradient=0x7f020007;
     }
     public static final class id {
         public static final int article_card=0x7f070000;

@@ -44,16 +44,22 @@ public class SleepDetector {
 	private static final float MODIFIER_DOUBLE_BLINK = 5.5f;
 
 	/**
-	 * The acceleration on Glass's Z axis needs to be above this
+	 * The acceleration on Glass's Z axis needs to be below this
 	 * amount (in meters per second) to add to mSleepLevel
 	 */
-	private static final float HEAD_THRESHOLD = 2f;
+	private static final float HEAD_LOW_THRESHOLD = -2.3f;
+	
+	/**
+	 * The acceleration on Glass's Z axis needs to be below this
+	 * amount (in meters per second) to add to mSleepLevel
+	 */
+	private static final float HEAD_HIGH_THRESHOLD = 5f;
 
 	/**
 	 * When adding head events to the sleep level, multiply
 	 * the acceleration on the Z axis (minus HEAD_THRESHOLD) by this amount.
 	 */
-	private static final float MODIFIER_HEAD_SCALE_PER_MILLISECOND = 0.003f;
+	private static final float MODIFIER_HEAD_SCALE_PER_MILLISECOND = 0.007f;
 
 	/**
 	 * Every millisecond, mSleepLevel is reduced by DEGRADATION_PER_MILLISECOND
@@ -115,7 +121,11 @@ public class SleepDetector {
 		// Setup for the head detector
 		mHeadEventListener = new HeadEventListener(){
 			public void onHeadEvent(float zMagnitude){
-				addHeadEvent(zMagnitude);
+				
+				// Negate the zMagnitude so that looking down is negative,
+				// and looking up is positive
+				addHeadEvent(-1 * zMagnitude);
+				
 				degradeSleepLevel();
 				checkSleepLevel();
 
@@ -162,9 +172,15 @@ public class SleepDetector {
 
 	private void addHeadEvent(float zMagnitude){
 		if(mLastHeadEvent != 0){
-			float absMagnitude = Math.abs(zMagnitude);
-			if(absMagnitude > HEAD_THRESHOLD){
-				mSleepLevel += (absMagnitude - HEAD_THRESHOLD) * (System.currentTimeMillis() - mLastHeadEvent) * MODIFIER_HEAD_SCALE_PER_MILLISECOND;
+//			float absMagnitude = Math.abs(zMagnitude);
+//			if(absMagnitude > HEAD_THRESHOLD){
+//				mSleepLevel += (absMagnitude - HEAD_THRESHOLD) * (System.currentTimeMillis() - mLastHeadEvent) * MODIFIER_HEAD_SCALE_PER_MILLISECOND;
+//			}
+			
+			if(zMagnitude < HEAD_LOW_THRESHOLD){
+				mSleepLevel += (-zMagnitude + HEAD_LOW_THRESHOLD) * (System.currentTimeMillis() - mLastHeadEvent) * MODIFIER_HEAD_SCALE_PER_MILLISECOND;
+			}else if(zMagnitude > HEAD_HIGH_THRESHOLD){
+				mSleepLevel += (zMagnitude - HEAD_HIGH_THRESHOLD) * (System.currentTimeMillis() - mLastHeadEvent) * MODIFIER_HEAD_SCALE_PER_MILLISECOND;
 			}
 
 		}

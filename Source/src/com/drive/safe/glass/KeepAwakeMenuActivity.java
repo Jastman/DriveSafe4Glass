@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager.LayoutParams;
 
 /**
  * Activity showing the options menu.
@@ -48,6 +50,7 @@ public class KeepAwakeMenuActivity extends Activity {
 	public void onResume() {
 		super.onResume();
 		openOptionsMenu();
+		turnOnScreen();
 	}
 
 	@Override
@@ -83,4 +86,11 @@ public class KeepAwakeMenuActivity extends Activity {
 		// Nothing else to do, closing the Activity.
 		finish();
 	}
+	
+	private void turnOnScreen() {
+        Window window = this.getWindow();
+        window.addFlags(LayoutParams.FLAG_DISMISS_KEYGUARD);
+        window.addFlags(LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        window.addFlags(LayoutParams.FLAG_TURN_SCREEN_ON);
+    }
 }
