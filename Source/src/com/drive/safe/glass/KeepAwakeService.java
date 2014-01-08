@@ -149,7 +149,7 @@ public class KeepAwakeService extends Service implements
 			mLastTimeSpoke = System.currentTimeMillis();
 		}
 
-		Intent menuIntent = new Intent(mContext, KeepAwakeMenuActivity.class);
+		Intent menuIntent = new Intent(mContext, KeepAwakeAlertActivity.class);
 		menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		menuIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 

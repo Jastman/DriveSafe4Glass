@@ -17,6 +17,12 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name" />
+        
+        <activity
+            android:name="com.drive.safe.glass.KeepAwakeAlertActivity"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name" />
 
         <service
             android:name="com.drive.safe.glass.KeepAwakeService"

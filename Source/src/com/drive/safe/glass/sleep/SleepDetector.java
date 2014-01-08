@@ -160,7 +160,11 @@ public class SleepDetector {
 		mEyeGestureManager.stopDetector(EyeGesture.DOUBLE_BLINK);
 		mEyeGestureManager.stopDetector(EyeGesture.WINK);
 
-		mContext.unregisterReceiver(mEyeEventReceiver);
+		try{
+			mContext.unregisterReceiver(mEyeEventReceiver);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 
 		// Head Events
 		mHeadEventReceiver.stopListening();
