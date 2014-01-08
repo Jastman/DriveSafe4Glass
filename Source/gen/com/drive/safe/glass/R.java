@@ -21,13 +21,13 @@ public final class R {
         public static final int text_gradient=0x7f020007;
     }
     public static final class id {
-        public static final int article_card=0x7f070000;
-        public static final int card_image=0x7f070001;
-        public static final int card_subtitle=0x7f070003;
-        public static final int card_text_container=0x7f070004;
-        public static final int card_title=0x7f070002;
-        public static final int directions=0x7f070005;
-        public static final int stop=0x7f070006;
+        public static final int article_card=0x7f080000;
+        public static final int card_image=0x7f080001;
+        public static final int card_subtitle=0x7f080003;
+        public static final int card_text_container=0x7f080004;
+        public static final int card_title=0x7f080002;
+        public static final int directions=0x7f080005;
+        public static final int stop=0x7f080006;
     }
     public static final class layout {
         public static final int card_alert=0x7f030000;
@@ -35,17 +35,21 @@ public final class R {
         public static final int card_half_image_with_title=0x7f030002;
     }
     public static final class menu {
-        public static final int keep_awake=0x7f060000;
+        public static final int keep_awake=0x7f070000;
+    }
+    public static final class raw {
+        public static final int beeps=0x7f050000;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
-        public static final int menu_get_directions=0x7f050006;
-        public static final int menu_stop=0x7f050005;
-        public static final int speech_wake_up=0x7f050002;
-        public static final int text_alert=0x7f050003;
-        public static final int text_keeping_you_awake=0x7f050007;
-        public static final int text_wake_up=0x7f050004;
-        public static final int voice_keep_me_awake=0x7f050001;
+        public static final int app_name=0x7f060000;
+        public static final int menu_get_directions=0x7f060007;
+        public static final int menu_stop=0x7f060006;
+        public static final int speech_wake_up=0x7f060002;
+        public static final int text_alert=0x7f060003;
+        public static final int text_keeping_you_awake=0x7f060008;
+        public static final int text_no_phone=0x7f060005;
+        public static final int text_wake_up=0x7f060004;
+        public static final int voice_keep_me_awake=0x7f060001;
     }
     public static final class xml {
         public static final int voice_trigger_start=0x7f040000;

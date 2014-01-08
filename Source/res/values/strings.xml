@@ -5,6 +5,7 @@
     <string name="speech_wake_up">Wake up! Perhaps you should find a rest area</string>
     <string name="text_alert">ALERT</string>
     <string name="text_wake_up">Tap for directions to a rest area</string>
+    <string name="text_no_phone">No Phone. GPS is unavailable</string>
     <string name="menu_stop">Stop</string>
     <string name="menu_get_directions">Find rest area</string>
     <string name="text_keeping_you_awake">Keeping you awake&#8230;</string>

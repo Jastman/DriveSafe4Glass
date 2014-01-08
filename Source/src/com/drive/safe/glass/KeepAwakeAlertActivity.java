@@ -6,12 +6,18 @@ package com.drive.safe.glass;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.KeyEvent;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.drive.safe.glass.bluetooth.BluetoothManager;
+import com.google.android.glass.media.Sounds;
 
 /**
  * Activity showing the options menu.
@@ -37,11 +43,22 @@ public class KeepAwakeAlertActivity extends Activity {
 		}
 	};
 
+	//private BluetoothManager mBtManager;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.card_alert);
+
+		// Doesn't seem to work
+		/*mBtManager = new BluetoothManager();
+		if (!mBtManager.isConnected()) {
+			// Glass is not connected to a phone,
+			TextView text = (TextView) findViewById(R.id.card_subtitle);
+			text.setText(getString(R.string.text_no_phone));
+			text.setTextColor(0xFFddbb11);
+		}*/
 
 		// Make image red
 		ImageView image = (ImageView) findViewById(R.id.card_image);
@@ -53,15 +70,15 @@ public class KeepAwakeAlertActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keycode, KeyEvent event) {
-		if (keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
+		if (/*mBtManager.isConnected() && */keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
 			// User tapped touchpad, get directions
-			if(mServiceBinder != null){
+			if (mServiceBinder != null) {
 				mServiceBinder.getDirectionsToRestArea();
 			}
-			
+
 			finish();
 			return true;
-		} 
+		}
 
 		return super.onKeyDown(keycode, event);
 	}

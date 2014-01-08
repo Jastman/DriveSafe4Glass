@@ -47,7 +47,7 @@ public class SleepDetector {
 	 * The acceleration on Glass's Z axis needs to be below this
 	 * amount (in meters per second) to add to mSleepLevel
 	 */
-	private static final float HEAD_LOW_THRESHOLD = -2.3f;
+	private static final float HEAD_LOW_THRESHOLD = -2.6f;
 	
 	/**
 	 * The acceleration on Glass's Z axis needs to be below this

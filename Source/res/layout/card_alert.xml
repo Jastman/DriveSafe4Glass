@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:paddingBottom="40px"
-    android:paddingLeft="40px"
-    android:paddingRight="40px"
+    android:paddingLeft="30px"
+    android:paddingRight="30px"
     android:paddingTop="40px"
     tools:context=".MainActivity" >
 

@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
@@ -25,11 +27,11 @@ public class KeepAwakeService extends Service implements
 	private static final String TAG = "KeepAwakeService";
 
 	private static final String CARD_TAG = "DriveSafe4Glass_LiveCard";
-	
+
 	/**
 	 * About how long it takes to speak the message in milliseconds
 	 */
-	private static final long SPEECH_TIME = 5000;
+	private static final long SPEECH_TIME = 10000;
 
 	/**
 	 * A binder that allows other parts of the application to the speech
@@ -55,6 +57,7 @@ public class KeepAwakeService extends Service implements
 
 	private Context mContext;
 
+	private MediaPlayer mPlayer;
 	private TextToSpeech mTTS;
 
 	private SleepDetector mSleepDetector;
@@ -65,7 +68,7 @@ public class KeepAwakeService extends Service implements
 	private LiveCardDrawer mLiveCardDrawer;
 
 	private long mLastTimeSpoke = 0;
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -78,6 +81,15 @@ public class KeepAwakeService extends Service implements
 			@Override
 			public void onInit(int status) {
 				// Nothing to do here
+			}
+		});
+
+		mPlayer = MediaPlayer.create(this, R.raw.beeps);
+		mPlayer.setOnCompletionListener(new OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				mTTS.speak(getString(R.string.speech_wake_up),
+						TextToSpeech.QUEUE_FLUSH, null);
 			}
 		});
 
@@ -128,6 +140,8 @@ public class KeepAwakeService extends Service implements
 
 		mSleepDetector.removeReceiver();
 
+		mTTS.shutdown();
+
 		super.onDestroy();
 	}
 
@@ -145,8 +159,11 @@ public class KeepAwakeService extends Service implements
 		Log.i(TAG, "User is falling asleep");
 
 		if (System.currentTimeMillis() - mLastTimeSpoke > SPEECH_TIME) {
-			mTTS.speak(getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
 			mLastTimeSpoke = System.currentTimeMillis();
+
+			// Play the beeps (and then the text to speech message on
+			// completion)
+			mPlayer.start();
 		}
 
 		Intent menuIntent = new Intent(mContext, KeepAwakeAlertActivity.class);
