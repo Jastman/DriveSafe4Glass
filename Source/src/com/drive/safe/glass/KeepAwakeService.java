@@ -16,8 +16,10 @@ import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
+import com.drive.safe.glass.analytics.APIKeys;
 import com.drive.safe.glass.sleep.SleepDetector;
 import com.drive.safe.glass.view.LiveCardDrawer;
+import com.flurry.android.FlurryAgent;
 import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.LiveCard.PublishMode;
 import com.google.android.glass.timeline.TimelineManager;
@@ -27,11 +29,11 @@ public class KeepAwakeService extends Service implements
 	private static final String TAG = "KeepAwakeService";
 
 	private static final String CARD_TAG = "DriveSafe4Glass_LiveCard";
-
+	
 	/**
 	 * About how long it takes to speak the message in milliseconds
 	 */
-	private static final long SPEECH_TIME = 10000;
+	private static final long SPEECH_TIME = 12000;
 
 	/**
 	 * A binder that allows other parts of the application to the speech
@@ -67,8 +69,10 @@ public class KeepAwakeService extends Service implements
 
 	private LiveCardDrawer mLiveCardDrawer;
 
+	// Used to make sure the alert does not activate constantly
 	private long mLastTimeSpoke = 0;
-
+	
+	
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -126,6 +130,9 @@ public class KeepAwakeService extends Service implements
 			mLiveCard.unpublish();
 			mLiveCard.publish(PublishMode.REVEAL);
 		}
+		
+		// Analytics
+		FlurryAgent.onStartSession(this, APIKeys.FLURRY_API_KEY);
 
 		return Service.START_STICKY;
 	}
@@ -141,6 +148,8 @@ public class KeepAwakeService extends Service implements
 		mSleepDetector.removeReceiver();
 
 		mTTS.shutdown();
+		
+		FlurryAgent.onEndSession(this);
 
 		super.onDestroy();
 	}
@@ -164,13 +173,14 @@ public class KeepAwakeService extends Service implements
 			// Play the beeps (and then the text to speech message on
 			// completion)
 			mPlayer.start();
+			
+			Intent alertIntent = new Intent(mContext, KeepAwakeAlertActivity.class);
+			alertIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			alertIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+			getApplication().startActivity(alertIntent);
 		}
 
-		Intent menuIntent = new Intent(mContext, KeepAwakeAlertActivity.class);
-		menuIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		menuIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-		getApplication().startActivity(menuIntent);
 	}
 
 }

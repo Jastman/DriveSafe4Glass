@@ -16,7 +16,9 @@ import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.drive.safe.glass.analytics.APIKeys;
 import com.drive.safe.glass.bluetooth.BluetoothManager;
+import com.flurry.android.FlurryAgent;
 import com.google.android.glass.media.Sounds;
 
 /**
@@ -43,7 +45,7 @@ public class KeepAwakeAlertActivity extends Activity {
 		}
 	};
 
-	//private BluetoothManager mBtManager;
+	// private BluetoothManager mBtManager;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,13 @@ public class KeepAwakeAlertActivity extends Activity {
 		setContentView(R.layout.card_alert);
 
 		// Doesn't seem to work
-		/*mBtManager = new BluetoothManager();
-		if (!mBtManager.isConnected()) {
-			// Glass is not connected to a phone,
-			TextView text = (TextView) findViewById(R.id.card_subtitle);
-			text.setText(getString(R.string.text_no_phone));
-			text.setTextColor(0xFFddbb11);
-		}*/
+		/*
+		 * mBtManager = new BluetoothManager(); if (!mBtManager.isConnected()) {
+		 * // Glass is not connected to a phone, TextView text = (TextView)
+		 * findViewById(R.id.card_subtitle);
+		 * text.setText(getString(R.string.text_no_phone));
+		 * text.setTextColor(0xFFddbb11); }
+		 */
 
 		// Make image red
 		ImageView image = (ImageView) findViewById(R.id.card_image);
@@ -70,11 +72,15 @@ public class KeepAwakeAlertActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keycode, KeyEvent event) {
-		if (/*mBtManager.isConnected() && */keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
+		if (/* mBtManager.isConnected() && */keycode == KeyEvent.KEYCODE_DPAD_CENTER) {
 			// User tapped touchpad, get directions
 			if (mServiceBinder != null) {
 				mServiceBinder.getDirectionsToRestArea();
 			}
+
+			// Play the click sound
+			AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+			audio.playSoundEffect(Sounds.TAP);
 
 			finish();
 			return true;
@@ -82,5 +88,22 @@ public class KeepAwakeAlertActivity extends Activity {
 
 		return super.onKeyDown(keycode, event);
 	}
-
+	
+	@Override
+	public void onStart(){
+		super.onStart();
+		
+		// Analytics
+		FlurryAgent.onStartSession(this, APIKeys.FLURRY_API_KEY);
+	}
+	
+	@Override
+	public void onStop(){
+		super.onStop();
+		
+		// Analytics
+		FlurryAgent.onEndSession(this);
+	}
+	
+	
 }

@@ -200,7 +200,8 @@ public class SleepDetector {
 	}
 
 	private void checkSleepLevel() {
-		Log.d(TAG, "Sleep Level: " + mSleepLevel + "/" + SLEEP_THRESHOLD);
+		//Log.d(TAG, "Sleep Level: " + mSleepLevel + "/" + SLEEP_THRESHOLD);
+		
 		if (mSleepLevel >= SLEEP_THRESHOLD) {
 			// The user is falling asleep
 			Log.i(TAG, "The user is falling asleep");
