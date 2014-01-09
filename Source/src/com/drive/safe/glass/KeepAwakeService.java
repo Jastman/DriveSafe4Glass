@@ -133,6 +133,8 @@ public class KeepAwakeService extends Service implements
 		
 		// Analytics
 		FlurryAgent.onStartSession(this, APIKeys.FLURRY_API_KEY);
+		
+		FlurryAgent.logEvent("Started");
 
 		return Service.START_STICKY;
 	}

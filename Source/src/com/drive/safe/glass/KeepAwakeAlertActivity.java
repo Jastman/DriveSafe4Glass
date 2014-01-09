@@ -95,6 +95,7 @@ public class KeepAwakeAlertActivity extends Activity {
 		
 		// Analytics
 		FlurryAgent.onStartSession(this, APIKeys.FLURRY_API_KEY);
+		FlurryAgent.logEvent("Alert_Displayed");
 	}
 	
 	@Override
