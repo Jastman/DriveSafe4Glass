@@ -54,7 +54,7 @@ public class EyeEventReceiver extends BroadcastReceiver {
 			}
 		}
 
-		abortBroadcast();
+		//abortBroadcast();
 	}
 
 }
