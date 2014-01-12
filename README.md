@@ -18,4 +18,4 @@ Sideload the app on Glass: [download here](https://github.com/victorkp/DriveSafe
 
 
 
-![Screenshot](/Alert.jpg)
+![Screenshot](http://raw2.github.com/victorkp/DriveSafe4Glass/master/Alert.jpg)
