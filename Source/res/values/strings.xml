@@ -1,13 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">DriveSafe4Glass</string>
     <string name="voice_keep_me_awake">Keep me awake</string>
     <string name="speech_wake_up">Wake up! Perhaps you should find a rest area</string>
     <string name="text_alert">ALERT</string>
-    <string name="text_wake_up">Tap for directions to a rest area</string>
+    <string name="text_wake_up">Tap to find a rest area</string>
     <string name="text_no_phone">No Phone. GPS is unavailable</string>
+    <string name="text_keeping_you_awake">Keeping you awake&#8230;</string>
+    
     <string name="menu_stop">Stop</string>
     <string name="menu_get_directions">Find rest area</string>
-    <string name="text_keeping_you_awake">Keeping you awake&#8230;</string>
+    <string name="menu_preferences">Preferences</string>
+    
+    <string name="pref_alert">Show alert</string>
+    <string name="pref_alert_first">the first time</string>
+    <string name="pref_alert_second">the second time</string>
+    <string name="pref_alert_third">the third time</string>
+    <string name="pref_alert_never">never</string>
+
+    <string name="pref_analytics">Allow Analytics</string>
 
 </resources>

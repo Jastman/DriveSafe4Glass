@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.drive.safe.glass"
     android:versionCode="1"
@@ -41,6 +42,9 @@
                 android:name="com.google.android.glass.VoiceTrigger"
                 android:resource="@xml/voice_trigger_start" />
         </service>
+
+        <activity android:name="com.drive.safe.glass.PreferenceActivity" >
+        </activity>
     </application>
 
 </manifest>

@@ -70,6 +70,12 @@ public class KeepAwakeMenuActivity extends Activity {
 			}
 			finish();
 			return true;
+		case R.id.preferences:
+			Log.d(TAG, "Preferences");
+			finish();
+			Intent preferenceIntent = new Intent(this, PreferenceActivity.class);
+			startActivity(preferenceIntent);
+			return true;
 		case R.id.stop:
 			Log.d(TAG, "Stopping");
 			stopService(new Intent(this, KeepAwakeService.class));

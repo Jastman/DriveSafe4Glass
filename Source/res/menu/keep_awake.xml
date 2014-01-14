@@ -1,15 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-	<item 
-		android:id="@+id/directions"
-		android:icon="@drawable/ic_directions_50"
-		android:title="@string/menu_get_directions"
-		/>
-
-	<item
-		android:id="@+id/stop"
-		android:icon="@drawable/ic_no_50"
-		android:title="@string/menu_stop"
-		/>
+    <item
+        android:id="@+id/directions"
+        android:icon="@drawable/ic_directions_50"
+        android:title="@string/menu_get_directions"/>
+    <item
+        android:id="@+id/preferences"
+        android:icon="@drawable/ic_gear_50"
+        android:title="@string/menu_preferences"/>
+    <item
+        android:id="@+id/stop"
+        android:icon="@drawable/ic_no_50"
+        android:title="@string/menu_stop"/>
 
 </menu>

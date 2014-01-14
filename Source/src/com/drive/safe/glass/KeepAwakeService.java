@@ -8,15 +8,19 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
+import com.drive.safe.glass.alert.AlertManager;
 import com.drive.safe.glass.analytics.APIKeys;
+import com.drive.safe.glass.preference.PreferenceConstants;
 import com.drive.safe.glass.sleep.SleepDetector;
 import com.drive.safe.glass.view.LiveCardDrawer;
 import com.flurry.android.FlurryAgent;
@@ -24,12 +28,11 @@ import com.google.android.glass.timeline.LiveCard;
 import com.google.android.glass.timeline.LiveCard.PublishMode;
 import com.google.android.glass.timeline.TimelineManager;
 
-public class KeepAwakeService extends Service implements
-		SleepDetector.SleepListener {
+public class KeepAwakeService extends Service implements SleepDetector.SleepListener {
 	private static final String TAG = "KeepAwakeService";
 
 	private static final String CARD_TAG = "DriveSafe4Glass_LiveCard";
-	
+
 	/**
 	 * About how long it takes to speak the message in milliseconds
 	 */
@@ -46,8 +49,7 @@ public class KeepAwakeService extends Service implements
 		public void getDirectionsToRestArea() {
 			Intent directionsIntent = new Intent(Intent.ACTION_VIEW);
 			directionsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			directionsIntent
-					.setData(Uri.parse("google.navigation:q=rest+area"));
+			directionsIntent.setData(Uri.parse("google.navigation:q=rest+area"));
 			getApplication().startActivity(directionsIntent);
 
 			// Stop KeepAwakeService now that the user is in navigation
@@ -69,10 +71,20 @@ public class KeepAwakeService extends Service implements
 
 	private LiveCardDrawer mLiveCardDrawer;
 
-	// Used to make sure the alert does not activate constantly
-	private long mLastTimeSpoke = 0;
-	
-	
+	private SharedPreferences mPrefs;
+
+	private AlertManager mAlertManager;
+
+	/**
+	 * Whether or not to speak the alert after playing the beep sound
+	 */
+	private boolean mSpeak = true;
+
+	/**
+	 * Whether or not analytics are allowed
+	 */
+	private boolean mAnalyticsEnabled = true;
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -80,6 +92,12 @@ public class KeepAwakeService extends Service implements
 
 		mTimeline = TimelineManager.from(mContext);
 		mLiveCardDrawer = new LiveCardDrawer(mContext);
+
+		mPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+		mAnalyticsEnabled = mPrefs.getBoolean(PreferenceConstants.ALLOW_ANALYTICS, PreferenceConstants.ALLOW_ANALYTICS_DEFAULT);
+
+		mAlertManager = new AlertManager(mPrefs);
 
 		mTTS = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
 			@Override
@@ -92,8 +110,9 @@ public class KeepAwakeService extends Service implements
 		mPlayer.setOnCompletionListener(new OnCompletionListener() {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
-				mTTS.speak(getString(R.string.speech_wake_up),
-						TextToSpeech.QUEUE_FLUSH, null);
+				if (mSpeak) {
+					mTTS.speak(getString(R.string.speech_wake_up), TextToSpeech.QUEUE_FLUSH, null);
+				}
 			}
 		});
 
@@ -118,10 +137,8 @@ public class KeepAwakeService extends Service implements
 			mLiveCard.getSurfaceHolder().addCallback(mLiveCardDrawer);
 
 			// Setup what to do on tapping of the card
-			Intent menuActivityIntent = new Intent(mContext,
-					KeepAwakeMenuActivity.class);
-			mLiveCard.setAction(PendingIntent.getActivity(mContext, 0,
-					menuActivityIntent, 0));
+			Intent menuActivityIntent = new Intent(mContext, KeepAwakeMenuActivity.class);
+			mLiveCard.setAction(PendingIntent.getActivity(mContext, 0, menuActivityIntent, 0));
 
 			mLiveCard.publish(PublishMode.REVEAL);
 		} else {
@@ -130,11 +147,12 @@ public class KeepAwakeService extends Service implements
 			mLiveCard.unpublish();
 			mLiveCard.publish(PublishMode.REVEAL);
 		}
-		
+
 		// Analytics
-		FlurryAgent.onStartSession(this, APIKeys.FLURRY_API_KEY);
-		
-		FlurryAgent.logEvent("Started");
+		if (mAnalyticsEnabled) {
+			FlurryAgent.onStartSession(this, APIKeys.FLURRY_API_KEY);
+			FlurryAgent.logEvent("Started");
+		}
 
 		return Service.START_STICKY;
 	}
@@ -150,8 +168,11 @@ public class KeepAwakeService extends Service implements
 		mSleepDetector.removeReceiver();
 
 		mTTS.shutdown();
-		
-		FlurryAgent.onEndSession(this);
+
+		// Analytics
+		if (mAnalyticsEnabled) {
+			FlurryAgent.onEndSession(this);
+		}
 
 		super.onDestroy();
 	}
@@ -169,20 +190,29 @@ public class KeepAwakeService extends Service implements
 	public void onUserFallingAsleep() {
 		Log.i(TAG, "User is falling asleep");
 
-		if (System.currentTimeMillis() - mLastTimeSpoke > SPEECH_TIME) {
-			mLastTimeSpoke = System.currentTimeMillis();
+		int alertLevel = mAlertManager.getAlertLevel();
 
-			// Play the beeps (and then the text to speech message on
-			// completion)
+		if (alertLevel == AlertManager.NO_ALERT) {
+			return;
+		} else if (alertLevel == AlertManager.BEEP_ONLY) {
+			// Only play the beep sound,
+			// so set mSpeak to false
+			mSpeak = false;
 			mPlayer.start();
-			
+		} else if (alertLevel == AlertManager.SHOW_ALERT) {
+			// Play beep sound, speak alert
+			// and show alert
+			mSpeak = true;
+			mPlayer.start();
+
 			Intent alertIntent = new Intent(mContext, KeepAwakeAlertActivity.class);
 			alertIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			alertIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 			getApplication().startActivity(alertIntent);
+		} else {
+			Log.e(TAG, "Unknown alertLevel: " + alertLevel);
 		}
-
 	}
 
 }
