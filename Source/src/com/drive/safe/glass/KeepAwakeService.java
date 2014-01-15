@@ -55,6 +55,15 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 			// Stop KeepAwakeService now that the user is in navigation
 			stopKeepAwakeService();
 		}
+		
+		/**
+		 * Call onUserFallingAsleep again.
+		 * Useful when there may be more data at hand,
+		 * as in when the GPS responds with a location
+		 */
+		public void updateOnUserFallingAsleep(){
+			onUserFallingAsleep();
+		}
 	}
 
 	private final KeepAwakeBinder mBinder = new KeepAwakeBinder();
@@ -97,7 +106,7 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 
 		mAnalyticsEnabled = mPrefs.getBoolean(PreferenceConstants.ALLOW_ANALYTICS, PreferenceConstants.ALLOW_ANALYTICS_DEFAULT);
 
-		mAlertManager = new AlertManager(mPrefs);
+		mAlertManager = new AlertManager(this, mPrefs);
 
 		mTTS = new TextToSpeech(mContext, new TextToSpeech.OnInitListener() {
 			@Override
@@ -188,8 +197,6 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 
 	@Override
 	public void onUserFallingAsleep() {
-		Log.i(TAG, "User is falling asleep");
-
 		int alertLevel = mAlertManager.getAlertLevel();
 
 		if (alertLevel == AlertManager.NO_ALERT) {
@@ -214,5 +221,4 @@ public class KeepAwakeService extends Service implements SleepDetector.SleepList
 			Log.e(TAG, "Unknown alertLevel: " + alertLevel);
 		}
 	}
-
 }

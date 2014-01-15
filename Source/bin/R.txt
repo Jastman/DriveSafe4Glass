@@ -35,10 +35,11 @@ int string menu_preferences 0x7f06000b
 int string menu_stop 0x7f060009
 int string pref_alert 0x7f06000c
 int string pref_alert_first 0x7f06000d
+int string pref_alert_if_moving 0x7f060011
 int string pref_alert_never 0x7f060010
 int string pref_alert_second 0x7f06000e
 int string pref_alert_third 0x7f06000f
-int string pref_analytics 0x7f060011
+int string pref_analytics 0x7f060012
 int string speech_wake_up 0x7f060004
 int string text_alert 0x7f060005
 int string text_keeping_you_awake 0x7f060008

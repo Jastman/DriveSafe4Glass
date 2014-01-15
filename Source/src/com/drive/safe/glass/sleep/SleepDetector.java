@@ -204,8 +204,6 @@ public class SleepDetector {
 		
 		if (mSleepLevel >= SLEEP_THRESHOLD) {
 			// The user is falling asleep
-			Log.i(TAG, "The user is falling asleep");
-
 			if (mSleepListener != null) {
 				mSleepListener.onUserFallingAsleep();
 			}

@@ -74,10 +74,11 @@ public final class R {
         public static final int menu_stop=0x7f060009;
         public static final int pref_alert=0x7f06000c;
         public static final int pref_alert_first=0x7f06000d;
+        public static final int pref_alert_if_moving=0x7f060011;
         public static final int pref_alert_never=0x7f060010;
         public static final int pref_alert_second=0x7f06000e;
         public static final int pref_alert_third=0x7f06000f;
-        public static final int pref_analytics=0x7f060011;
+        public static final int pref_analytics=0x7f060012;
         public static final int speech_wake_up=0x7f060004;
         public static final int text_alert=0x7f060005;
         public static final int text_keeping_you_awake=0x7f060008;

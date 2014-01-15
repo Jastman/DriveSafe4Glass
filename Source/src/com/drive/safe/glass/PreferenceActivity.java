@@ -9,8 +9,6 @@ import com.victor.kaiser.pendergrast.settings.GlassPreferenceActivity;
 import com.victor.kaiser.pendergrast.settings.option.OptionsBuilder;
 
 import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
 
 public class PreferenceActivity extends GlassPreferenceActivity {
 
@@ -25,6 +23,8 @@ public class PreferenceActivity extends GlassPreferenceActivity {
 					.addOption(getString(R.string.pref_alert_never));
 		// Default to show the second time
 		addChoicePreference(PreferenceConstants.SHOW_ALERT, getString(R.string.pref_alert), alertOptions.build(), PreferenceConstants.SHOW_ALERT_DEFAULT);
+		addTogglePreference(PreferenceConstants.SHOW_ALERT_ONLY_IF_MOVING, getString(R.string.pref_alert_if_moving),
+				       	PreferenceConstants.SHOW_ALERT_ONLY_IF_MOVING_DEFAULT);
 		addTogglePreference(PreferenceConstants.ALLOW_ANALYTICS, getString(R.string.pref_analytics), PreferenceConstants.ALLOW_ANALYTICS_DEFAULT);
 		
 		buildAndShowOptions();
