@@ -63,7 +63,7 @@ public class AlertManager implements LocationListener {
 	 * The minimum speed in meters per second that is considered to be moving 5
 	 * meters per second is about 11.18 miles per hour
 	 */
-	private static final float MIN_SPEED = 0.3f; //4;
+	private static final float MIN_SPEED = 4;
 
 	/**
 	 * The maximum amount of time to wait to get a Location from GPS
