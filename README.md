@@ -9,6 +9,7 @@ More features coming soon!
 
 ## How to Install ##
 Sideload the app on Glass: [download here](https://github.com/victorkp/DriveSafe4Glass/blob/master/DriveSafe4Glass.apk?raw=true)
+Need help sideloading DriveSafe on Glass? [Follow these steps](http://appliedanalog.com/agw/?p=17)
 
 ## Team ##
 *   Jake Steinerman: Management/Marketing
